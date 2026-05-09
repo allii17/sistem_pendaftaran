@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Pendaftaran — Universitas Pamulang</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="header">
+
+  <div class="header-logo">
+    UP
+  </div>
+
+  <div>
+    <div class="header-title">
+      Universitas Pamulang
+    </div>
+
+    <div class="header-sub">
+      Sistem Input Pendaftaran Mahasiswa Baru
+    </div>
+  </div>
+
+</div>
+
+<div class="container">
+
+  <!-- Statistik -->
+  <div class="stat-row">
+
+    <div class="stat-card">
+      <div class="stat-icon">👨‍🎓</div>
+
+      <div class="stat-content">
+        <div class="stat-num" id="totalPendaftar">4</div>
+        <div class="stat-lbl">Total Pendaftar</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon green-bg">✔</div>
+
+      <div class="stat-content">
+        <div class="stat-num green" id="totalLulus">2</div>
+        <div class="stat-lbl">Lulus (≥ 70)</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon amber-bg">⏳</div>
+
+      <div class="stat-content">
+        <div class="stat-num amber" id="totalCadangan">1</div>
+        <div class="stat-lbl">Cadangan (60–69)</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon red-bg">✖</div>
+
+      <div class="stat-content">
+        <div class="stat-num red" id="totalTidak">1</div>
+        <div class="stat-lbl">Tidak Lulus (&lt; 60)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Form -->
+  <div class="card">
+
+    <div class="card-title">
+      Input Pendaftaran
+    </div>
+
+    <div class="kode-preview" id="kodePreview">
+      —
+    </div>
+
+    <div class="form-grid-3">
+
+      <div class="field">
+        <label>Gedung</label>
+
+        <select id="gedung" onchange="updateKode()">
+          <option value="">-- Pilih --</option>
+          <option value="A">A — Gedung A</option>
+          <option value="B">B — Gedung B</option>
+          <option value="V">V — Viktor</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Nomor Urut</label>
+
+        <input
+          type="number"
+          id="nomor"
+          min="1"
+          max="99"
+          oninput="updateKode()"
+        >
+      </div>
+
+      <div class="field">
+        <label>Keterangan</label>
+
+        <input
+          type="number"
+          id="ket"
+          min="1"
+          max="9"
+          oninput="updateKode()"
+        >
+      </div>
+
+    </div>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Nama Pendaftar</label>
+        <input type="text" id="nama">
+      </div>
+
+      <div class="field">
+        <label>Jenis Kelamin</label>
+
+        <select id="jk">
+          <option value="">-- Pilih --</option>
+          <option>Laki-Laki</option>
+          <option>Perempuan</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Tempat, Tanggal Lahir</label>
+        <input type="text" id="ttl">
+      </div>
+
+      <div class="field">
+        <label>Asal Sekolah</label>
+        <input type="text" id="asal">
+      </div>
+
+    </div>
+
+    <div class="nilai-row">
+
+      <div class="field">
+        <label>Nilai Matematika</label>
+        <input type="number" id="mat" oninput="hitungRata()">
+      </div>
+
+      <div class="field">
+        <label>Nilai Indonesia</label>
+        <input type="number" id="indo" oninput="hitungRata()">
+      </div>
+
+      <div class="field">
+        <label>Nilai Inggris</label>
+        <input type="number" id="ing" oninput="hitungRata()">
+      </div>
+
+      <div class="field">
+        <label>Rata-rata</label>
+
+        <div class="rata-preview" id="rataPreview">
+          —
+        </div>
+      </div>
+
+    </div>
+
+    <div class="btn-row">
+
+      <button class="btn btn-primary" onclick="tambahData()">
+        + Simpan
+      </button>
+
+      <button class="btn" onclick="resetForm()">
+        Reset
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Data -->
+  <div class="card">
+
+    <div class="card-title">
+      Data Pendaftar
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Cari nama..."
+        onkeyup="renderTable()"
+      >
+
+    </div>
+
+    <div class="tbl-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Nama</th>
+            <th>JK</th>
+            <th>TTL</th>
+            <th>Asal</th>
+            <th>Rata</th>
+            <th>Status</th>
+            <th>Hapus</th>
+          </tr>
+        </thead>
+
+        <tbody id="tbody">
+
+          <tr>
+            <td><span class="kode-tag">A01-1</span></td>
+            <td>Nur Ali Mahpudin</td>
+            <td>Laki-Laki</td>
+            <td>Tangerang, 15-03-2001</td>
+            <td>SMA Negeri 3 Pamulang</td>
+            <td><b>90.0</b></td>
+            <td>
+              <span class="badge badge-lulus">
+                Lulus
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-danger">
+                Hapus
+              </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="kode-tag">B02-2</span></td>
+            <td>Ali</td>
+            <td>Laki-Laki</td>
+            <td>Serang, 10-05-2002</td>
+            <td>SMA Negeri 1 Serang</td>
+            <td><b>72.3</b></td>
+            <td>
+              <span class="badge badge-lulus">
+                Lulus
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-danger">
+                Hapus
+              </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="kode-tag">V03-1</span></td>
+            <td>Mahoudi</td>
+            <td>Laki-Laki</td>
+            <td>Pandeglang, 12-11-2003</td>
+            <td>SMA Al-Fawaz</td>
+            <td><b>62.3</b></td>
+            <td>
+              <span class="badge badge-cadangan">
+                Cadangan
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-danger">
+                Hapus
+              </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="kode-tag">A04-3</span></td>
+            <td>Nur</td>
+            <td>Perempuan</td>
+            <td>Lebak, 08-08-2002</td>
+            <td>SMA Negeri 5 Lebak</td>
+            <td><b>54.3</b></td>
+            <td>
+              <span class="badge badge-tidak">
+                Tidak Lulus
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-danger">
+                Hapus
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
